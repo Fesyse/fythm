@@ -3,7 +3,7 @@ import { Module } from "@nestjs/common"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { GatewayIntentBits } from "discord.js"
 
-import { BotModule } from "@/bot/bot.module"
+import { BotModule } from "./bot/bot.module"
 
 @Module({
 	imports: [
@@ -11,7 +11,7 @@ import { BotModule } from "@/bot/bot.module"
 		DiscordModule.forRootAsync({
 			imports: [ConfigModule],
 			useFactory: (configService: ConfigService) => ({
-				token: configService.get("DISCORD_BOT_TOKEN"),
+				token: configService.get("DISCORD_TOKEN"),
 				discordClientOptions: {
 					intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]
 				},

@@ -6,7 +6,7 @@ export class PlayDto {
 	@Param({
 		name: "song",
 		description:
-			"Name or URL of song/playlist. Could be from (Youtube, Spotify, SoundCloud)",
+			"Name or URL of song/playlist. Could be from (YandexMusic, Spotify, SoundCloud)",
 		required: true
 	})
 	song: string
