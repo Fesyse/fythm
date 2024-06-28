@@ -6,12 +6,12 @@ import {
 	InteractionEvent,
 	MessageEvent
 } from "@discord-nestjs/core"
-import { ClientEvents, Message } from "discord.js"
+import { ClientEvents, EmbedBuilder, Message } from "discord.js"
 
 import { PlayDto } from "../dto/play.dto"
 import { joinVoiceChannel } from "@discordjs/voice"
 import { YoutubeService } from "@/youtube/youtube.service"
-import { getImageSizes } from "@/utils"
+import { imageSize } from "@/utils"
 
 @Command({
 	name: "play",
@@ -48,22 +48,46 @@ export class PlayCommand {
 			adapterCreator: message.guild.voiceAdapterCreator
 		})
 		const music = await this.youtubeService.findMusic(dto.song)
+		const selectedMusic = music[0]
+		if (!music.length) return `No music found with given prompt.`
 
-		const imageSizes = getImageSizes(
-			"https://i.ytimg.com/vi/J8NKwTYkDH8/maxresdefault.jpg"
-		)
-		console.log(imageSizes)
-		message.reply({
-			embeds: [
+		// @ts-ignore
+		const user = message.author ?? (message.user as typeof message.author)
+
+		const embed = new EmbedBuilder()
+			.setColor(0x0099ff)
+			.setTitle(`:musical_note:  Playing song \`${selectedMusic.title}\``)
+			.setAuthor({
+				name: user.displayName,
+				iconURL: user.avatarURL() ?? "/img/user.svg",
+				url: "https://discord.js.org"
+			})
+			.setThumbnail(selectedMusic.thumbnail)
+			.addFields(
 				{
-					image: {
-						url: "https://i.ytimg.com/vi/J8NKwTYkDH8/maxresdefault.jpg",
-						width: imageSizes.width / 10,
-						height: imageSizes.height / 10
-					},
-					description: `**Started playing** [${music[0].title}](${music[0].link}).`
+					name: ":mens: Requested by",
+					value: user.toString(),
+					inline: true
+				},
+				{
+					name: ":clock1: Music duration",
+					value: `\`${selectedMusic.duration}\``,
+					inline: true
+				},
+				{
+					name: ":copyright: Song author",
+					value: `\`${selectedMusic.artist}\``,
+					inline: true
 				}
-			]
+			)
+			.setTimestamp()
+			.setFooter({
+				text: "Fythm",
+				iconURL: "https://i.ibb.co/W6c32cx/fythm-logo.png"
+			})
+
+		message.reply({
+			embeds: [embed]
 		})
 	}
 }
