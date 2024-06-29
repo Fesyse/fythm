@@ -67,7 +67,7 @@ export class PlayCommand {
 			})
 		return embed
 	}
-	getPlayCommandActionButtonRows() {
+	get playCommandButtonRows() {
 		const firstButtonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 			new ButtonBuilder()
 				.setCustomId("volume-down")
@@ -123,7 +123,7 @@ export class PlayCommand {
 
 		await message.reply({
 			embeds: [embed],
-			components: [...this.getPlayCommandActionButtonRows()]
+			components: [...this.playCommandButtonRows]
 		})
 	}
 }
