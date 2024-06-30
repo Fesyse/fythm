@@ -13,7 +13,9 @@ import {
 	ClientEvents,
 	EmbedBuilder,
 	Message,
-	User
+	ThreadMemberManager,
+	User,
+	VoiceStateManager
 } from "discord.js"
 
 import { PlayDto } from "../dto/play.dto"
@@ -109,7 +111,19 @@ export class PlayCommand {
 				`You must be in a voice channel in order to play music.`
 			)
 
-		const connection = this.joinVoiceChannel(message)
+		let isBotConnected = false
+		const voiceMembers = message.guild.channels.cache.get(
+			voice.channelId
+		).members
+
+		if (!(voiceMembers instanceof ThreadMemberManager)) {
+			voiceMembers.map(member => {
+				if (!member.user.bot) return
+				isBotConnected = member.user.id === process.env.DISCORD_APP_ID
+			})
+		}
+
+		if (!isBotConnected) this.joinVoiceChannel(message)
 		const music = await this.youtubeService.findMusic(dto.song)
 		const selectedMusic = music[0]
 		if (!music.length) return `No music found with given prompt.`
