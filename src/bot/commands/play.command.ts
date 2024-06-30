@@ -29,6 +29,26 @@ import { Music } from "ytubes/dist/types/data"
 export class PlayCommand {
 	constructor(private youtubeService: YoutubeService) {}
 
+	get playCommandButtonRows() {
+		const firstButtonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+			new ButtonBuilder()
+				.setCustomId("volume-down")
+				.setLabel("- Vol")
+				.setStyle(ButtonStyle.Secondary)
+				.setEmoji("🔉"),
+			new ButtonBuilder()
+				.setCustomId("volume-mute")
+				.setLabel("Mute")
+				.setStyle(ButtonStyle.Secondary)
+				.setEmoji("🔇"),
+			new ButtonBuilder()
+				.setCustomId("volume-up")
+				.setLabel("+ Vol")
+				.setStyle(ButtonStyle.Secondary)
+				.setEmoji("🔊")
+		)
+		return [firstButtonRow]
+	}
 	getPlayCommandEmbed(message: Message, selectedMusic: Music) {
 		let user: User
 		if ("user" in message) user = message.user as typeof message.author
@@ -67,32 +87,12 @@ export class PlayCommand {
 			})
 		return embed
 	}
-	get playCommandButtonRows() {
-		const firstButtonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-			new ButtonBuilder()
-				.setCustomId("volume-down")
-				.setLabel("- Vol")
-				.setStyle(ButtonStyle.Secondary)
-				.setEmoji("🔉"),
-			new ButtonBuilder()
-				.setCustomId("volume-mute")
-				.setLabel("Mute")
-				.setStyle(ButtonStyle.Secondary)
-				.setEmoji("🔇"),
-			new ButtonBuilder()
-				.setCustomId("volume-up")
-				.setLabel("+ Vol")
-				.setStyle(ButtonStyle.Secondary)
-				.setEmoji("🔊")
-		)
-		return [firstButtonRow]
-	}
 
 	joinVoiceChannel(message: Message) {
 		const connection = joinVoiceChannel({
-			channelId: message.channelId,
+			channelId: message.member.voice.channelId,
 			guildId: message.guildId,
-			adapterCreator: message.guild.voiceAdapterCreator
+			adapterCreator: message.member.voice.guild.voiceAdapterCreator
 		})
 
 		return connection
@@ -110,11 +110,9 @@ export class PlayCommand {
 				`You must be in a voice channel in order to play music.`
 			)
 
-		const connection = joinVoiceChannel({
-			channelId: message.channelId,
-			guildId: message.guildId,
-			adapterCreator: message.guild.voiceAdapterCreator
-		})
+		// TODLO
+
+		const connection = this.joinVoiceChannel(message)
 		const music = await this.youtubeService.findMusic(dto.song)
 		const selectedMusic = music[0]
 		if (!music.length) return `No music found with given prompt.`
