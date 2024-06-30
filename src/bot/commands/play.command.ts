@@ -101,7 +101,6 @@ export class PlayCommand {
 	@Handler()
 	async onPlayCommand(
 		@InteractionEvent(SlashCommandPipe) dto: PlayDto,
-		@EventParams() args: ClientEvents["interactionCreate"],
 		@MessageEvent() message: Message
 	) {
 		const voice = message.member.voice
@@ -109,8 +108,6 @@ export class PlayCommand {
 			return await message.reply(
 				`You must be in a voice channel in order to play music.`
 			)
-
-		// TODLO
 
 		const connection = this.joinVoiceChannel(message)
 		const music = await this.youtubeService.findMusic(dto.song)

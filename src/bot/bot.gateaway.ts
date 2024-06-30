@@ -31,11 +31,4 @@ export class BotGateway {
 			buttonAction()
 		}
 	}
-
-	@On("messageCreate")
-	async onMessage(message: Message): Promise<void> {
-		if (!message.author.bot) {
-			await message.reply("I'm watching you")
-		}
-	}
 }
