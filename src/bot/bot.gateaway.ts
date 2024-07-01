@@ -9,7 +9,10 @@ type ButtonAction = Function
 export class BotGateway {
 	private readonly logger = new Logger(BotGateway.name)
 	private readonly buttonActions = {
-		"custom-id": () => {} // example
+		"custom-id": () => {}, // example
+		"volume-down": () => {},
+		"volume-mute": () => {},
+		"volume-up": () => {}
 	} satisfies Record<CustomId, ButtonAction> // TODO: Add button actions
 
 	constructor(

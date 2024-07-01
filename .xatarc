@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Fesyse-s-workspace-c6il4c.eu-central-1.xata.sh/db/fythm",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}
