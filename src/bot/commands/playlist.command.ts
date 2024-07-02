@@ -1,16 +1,10 @@
-import { Command, Handler } from "@discord-nestjs/core"
-import {
-	ApplicationCommandType,
-	ContextMenuCommandInteraction
-} from "discord.js"
+import { Command } from "@discord-nestjs/core"
+import { AddToPlaylistSubCommand } from "./sub/playlist/add-to-playlist.subcommand"
+import { ShowPlaylistSubCommand } from "./sub/playlist/show-playlist.subcommand"
 
 @Command({
 	name: "playlist",
-	type: ApplicationCommandType.User
+	description: "Playlist that containts your favorite songs.",
+	include: [ShowPlaylistSubCommand, AddToPlaylistSubCommand]
 })
-export class PlaylistCommand {
-	@Handler()
-	onPlaylistCommand(interaction: ContextMenuCommandInteraction): string {
-		return "Your playlist..."
-	}
-}
+export class PlaylistCommand {}

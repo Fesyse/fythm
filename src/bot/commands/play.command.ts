@@ -23,7 +23,7 @@ import { Database } from "@/types"
 
 @Command({
 	name: "play",
-	description: "Plays a song"
+	description: "Plays a song by given query"
 })
 export class PlayCommand {
 	private drizzle: Database

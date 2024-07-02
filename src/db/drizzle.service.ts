@@ -14,7 +14,7 @@ import { Database } from "@/types"
 
 @Injectable()
 export class DrizzleService implements OnModuleInit {
-	private db: VercelPgDatabase<typeof schema>
+	private db: Database
 
 	async onModuleInit() {
 		try {

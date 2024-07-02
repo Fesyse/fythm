@@ -5,7 +5,8 @@ import { PlayCommand } from "@/bot/commands/play.command"
 import { PlaylistCommand } from "@/bot/commands/playlist.command"
 import { YoutubeService } from "@/youtube/youtube.service"
 import { DrizzleService } from "@/db/drizzle.service"
-import { AddToPlaylistSubCommand } from "./commands/sub/add-to-playlist.subcommand"
+import { AddToPlaylistSubCommand } from "./commands/sub/playlist/add-to-playlist.subcommand"
+import { ShowPlaylistSubCommand } from "./commands/sub/playlist/show-playlist.subcommand"
 
 @Module({
 	imports: [DiscordModule.forFeature()],
@@ -14,6 +15,7 @@ import { AddToPlaylistSubCommand } from "./commands/sub/add-to-playlist.subcomma
 		DrizzleService,
 		PlayCommand,
 		PlaylistCommand,
+		ShowPlaylistSubCommand,
 		AddToPlaylistSubCommand
 	]
 })
