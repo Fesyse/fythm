@@ -28,7 +28,7 @@ import { Database } from "@/types"
 export class PlayCommand {
 	private drizzle: Database
 	constructor(
-		private drizzle: DrizzleService,
+		drizzle: DrizzleService,
 		private youtubeService: YoutubeService
 	) {
 		this.drizzle = drizzle.getDb()
