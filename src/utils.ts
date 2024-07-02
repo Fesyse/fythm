@@ -1,5 +1,6 @@
 import centra from "centra"
 import sizeOf from "buffer-image-size"
+import { Message, User } from "discord.js"
 
 export const imageSize = async (src: string | ArrayBuffer | Buffer) => {
 	let buffer: Buffer
@@ -19,4 +20,10 @@ export const imageSize = async (src: string | ArrayBuffer | Buffer) => {
 	const { height, width } = sizeOf(buffer)
 
 	return { height, width }
+}
+export const getUserFromMessage = (message: Message) => {
+	let user: User
+	if ("user" in message) user = message.user as typeof message.author
+	else user = message.author
+	return user
 }

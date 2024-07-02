@@ -20,6 +20,7 @@ import { YoutubeService } from "@/youtube/youtube.service"
 import { Music } from "ytubes/dist/types/data"
 import { DrizzleService } from "@/db/drizzle.service"
 import { Database } from "@/types"
+import { getUserFromMessage } from "@/utils"
 
 @Command({
 	name: "play",
@@ -55,9 +56,7 @@ export class PlayCommand {
 		return [firstButtonRow]
 	}
 	getPlayCommandEmbed(message: Message, selectedMusic: Music) {
-		let user: User
-		if ("user" in message) user = message.user as typeof message.author
-		else user = message.author
+		const user = getUserFromMessage(message)
 
 		const embed = new EmbedBuilder()
 			.setColor("#fff0db")
