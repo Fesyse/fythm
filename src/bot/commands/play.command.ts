@@ -1,7 +1,6 @@
 import { SlashCommandPipe } from "@discord-nestjs/common"
 import {
 	Command,
-	EventParams,
 	Handler,
 	InteractionEvent,
 	MessageEvent
@@ -10,26 +9,30 @@ import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
-	ClientEvents,
 	EmbedBuilder,
 	Message,
-	ThreadMemberManager,
-	User,
-	VoiceStateManager
+	User
 } from "discord.js"
 
 import { PlayDto } from "../dto/play.dto"
 import { joinVoiceChannel } from "@discordjs/voice"
 import { YoutubeService } from "@/youtube/youtube.service"
-import { imageSize } from "@/utils"
 import { Music } from "ytubes/dist/types/data"
+import { DrizzleService } from "@/db/drizzle.service"
+import { Database } from "@/types"
 
 @Command({
 	name: "play",
 	description: "Plays a song"
 })
 export class PlayCommand {
-	constructor(private youtubeService: YoutubeService) {}
+	private drizzle: Database
+	constructor(
+		private drizzle: DrizzleService,
+		private youtubeService: YoutubeService
+	) {
+		this.drizzle = drizzle.getDb()
+	}
 
 	get playCommandButtonRows() {
 		const firstButtonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -116,7 +119,7 @@ export class PlayCommand {
 			voice.channelId
 		).members
 
-		if (!(voiceMembers instanceof ThreadMemberManager)) {
+		if (voiceMembers instanceof Map) {
 			voiceMembers.map(member => {
 				if (!member.user.bot) return
 				isBotConnected = member.user.id === process.env.DISCORD_APP_ID

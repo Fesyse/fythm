@@ -11,10 +11,11 @@ export class DrizzleService implements OnModuleInit {
 
 	async onModuleInit() {
 		try {
-			const db = drizzle(sql)
-
+			const db = drizzle(sql, {
+				schema
+			})
+			this.db = db
 			console.log("Database connected successfully")
-			return db
 		} catch (error) {
 			console.error("Failed to connect to the database", error)
 			throw error
