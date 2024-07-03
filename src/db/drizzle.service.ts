@@ -8,9 +8,10 @@ import { drizzle as postgresDrizzle } from "drizzle-orm/node-postgres"
 
 import "@/db/envConfig"
 import * as schema from "./schema"
-import { sql } from "@vercel/postgres"
+import { sql as vercelSql } from "@vercel/postgres"
 import { Client } from "pg"
 import { Database } from "@/types"
+import { eq, sql } from "drizzle-orm"
 
 @Injectable()
 export class DrizzleService implements OnModuleInit {
@@ -21,7 +22,7 @@ export class DrizzleService implements OnModuleInit {
 			let db: Database
 			switch (process.env.ENV_MODE) {
 				case "production":
-					db = vercelDrizzle(sql, {
+					db = vercelDrizzle(vercelSql, {
 						schema
 					})
 					break
@@ -29,6 +30,7 @@ export class DrizzleService implements OnModuleInit {
 					const client = new Client({
 						connectionString: process.env.DEVELOPMENT_DB_URL
 					})
+					await client.connect()
 					db = postgresDrizzle(client, {
 						schema
 					})
