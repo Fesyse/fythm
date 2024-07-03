@@ -18,23 +18,21 @@ import { PlayDto } from "../dto/play.dto"
 import { joinVoiceChannel } from "@discordjs/voice"
 import { YoutubeService } from "@/youtube/youtube.service"
 import { Music } from "ytubes/dist/types/data"
-import { DrizzleService } from "@/db/drizzle.service"
 import { Database } from "@/types"
 import { getUserFromMessage } from "@/utils"
 import { EMBED_COLOR, LOGO_URL } from "@/constants"
+import { Inject } from "@nestjs/common"
+import { DrizzleAsyncProvider } from "@/db/drizzle.provider"
 
 @Command({
 	name: "play",
 	description: "Plays a song by given query"
 })
 export class PlayCommand {
-	private drizzle: Database
 	constructor(
-		drizzle: DrizzleService,
+		@Inject(DrizzleAsyncProvider) private drizzle: Database,
 		private youtubeService: YoutubeService
-	) {
-		this.drizzle = drizzle.getDb()
-	}
+	) {}
 
 	get playCommandButtonRows() {
 		const firstButtonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
