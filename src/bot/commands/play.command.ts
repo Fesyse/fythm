@@ -21,6 +21,7 @@ import { Music } from "ytubes/dist/types/data"
 import { DrizzleService } from "@/db/drizzle.service"
 import { Database } from "@/types"
 import { getUserFromMessage } from "@/utils"
+import { EMBED_COLOR, LOGO_URL } from "@/constants"
 
 @Command({
 	name: "play",
@@ -59,7 +60,7 @@ export class PlayCommand {
 		const user = getUserFromMessage(message)
 
 		const embed = new EmbedBuilder()
-			.setColor("#fff0db")
+			.setColor(EMBED_COLOR)
 			.setTitle(`:musical_note:  Playing song \`${selectedMusic.title}\``)
 			.setAuthor({
 				name: user.displayName,
@@ -87,7 +88,7 @@ export class PlayCommand {
 			.setTimestamp()
 			.setFooter({
 				text: "Fythm",
-				iconURL: "https://i.ibb.co/W6c32cx/fythm-logo.png"
+				iconURL: LOGO_URL
 			})
 		return embed
 	}

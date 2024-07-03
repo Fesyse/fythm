@@ -1,6 +1,6 @@
+import { EMBED_COLOR, LOGO_URL, MAX_MUSICS_IN_PLAYLIST } from "@/constants"
 import { DrizzleService } from "@/db/drizzle.service"
 import { Music } from "@/db/schema"
-import { Database } from "@/types"
 import { getUserFromMessage } from "@/utils"
 import { YoutubeService } from "@/youtube/youtube.service"
 import { Handler, MessageEvent, SubCommand } from "@discord-nestjs/core"
@@ -14,7 +14,13 @@ export class ShowPlaylistSubCommand {
 	) {}
 
 	private getShowPlaylistEmbed(playlist: Music[]) {
-		const embed = new EmbedBuilder().setTitle("Your playlist")
+		const embed = new EmbedBuilder()
+			.setTitle(":musical_score:  Your playlist")
+			.setColor(EMBED_COLOR)
+			.setFooter({
+				text: `Fythm - ${playlist.length}/${MAX_MUSICS_IN_PLAYLIST} songs are in playlist.`,
+				iconURL: LOGO_URL
+			})
 		playlist.map(music => {
 			embed.addFields({
 				name: "Name",
