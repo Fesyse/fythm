@@ -1,8 +1,9 @@
 import { relations, sql } from "drizzle-orm"
-import { pgTable, serial, text, integer } from "drizzle-orm/pg-core"
+import { pgTable, serial, text, integer, timestamp } from "drizzle-orm/pg-core"
 
 const users = pgTable("users", {
 	id: text("id").notNull().primaryKey(),
+	subscriptionExpireDate: timestamp("subscription_expire_date"),
 	username: text("username").notNull(),
 	avatarUrl: text("avatar_url")
 })
