@@ -13,6 +13,7 @@ const musics = pgTable("musics", {
 	duration: text("duration").notNull(),
 	artist: text("artist").notNull(),
 	url: text("url").notNull(),
+	thumbnailImageUrl: text("thumbnail_image_url").notNull(),
 	userId: text("user_id")
 		.notNull()
 		.references(() => users.id, { onDelete: "cascade", onUpdate: "restrict" })

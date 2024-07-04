@@ -19,7 +19,7 @@ import { joinVoiceChannel } from "@discordjs/voice"
 import { YoutubeService } from "@/youtube/youtube.service"
 import { Music } from "ytubes/dist/types/data"
 import { Database } from "@/types"
-import { getUserFromMessage } from "@/utils"
+import { getDefaultEmbedFooter, getUserFromMessage } from "@/utils"
 import { EMBED_COLOR, LOGO_URL } from "@/constants"
 import { Inject } from "@nestjs/common"
 import { DrizzleAsyncProvider } from "@/db/drizzle.provider"
@@ -84,10 +84,7 @@ export class PlayCommand {
 				}
 			)
 			.setTimestamp()
-			.setFooter({
-				text: "Fythm",
-				iconURL: LOGO_URL
-			})
+			.setFooter(getDefaultEmbedFooter())
 		return embed
 	}
 
@@ -127,7 +124,7 @@ export class PlayCommand {
 		if (!isBotConnected) this.joinVoiceChannel(message)
 		const music = await this.youtubeService.findMusic(dto.song)
 		const selectedMusic = music[0]
-		if (!music.length) return `No music found with given prompt.`
+		if (!music.length) return message.reply("Song not found!")
 
 		const embed = this.getPlayCommandEmbed(message, selectedMusic)
 

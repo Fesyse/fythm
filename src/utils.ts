@@ -1,6 +1,7 @@
 import centra from "centra"
 import sizeOf from "buffer-image-size"
 import { Message, User } from "discord.js"
+import { LOGO_URL } from "./constants"
 
 export const imageSize = async (src: string | ArrayBuffer | Buffer) => {
 	let buffer: Buffer
@@ -27,3 +28,7 @@ export const getUserFromMessage = (message: Message) => {
 	else user = message.author
 	return user
 }
+export const getDefaultEmbedFooter = (text?: string) => ({
+	text: `Fythm ${text ? `| ${text}` : ""}`,
+	iconURL: LOGO_URL
+})
