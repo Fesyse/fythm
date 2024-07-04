@@ -2,6 +2,7 @@ import { SlashCommandPipe } from "@discord-nestjs/common"
 import {
 	Command,
 	Handler,
+	InjectDiscordClient,
 	InteractionEvent,
 	MessageEvent
 } from "@discord-nestjs/core"
@@ -10,12 +11,16 @@ import {
 	ButtonBuilder,
 	ButtonStyle,
 	EmbedBuilder,
-	Message,
-	User
+	Message
 } from "discord.js"
 
 import { PlayDto } from "../dto/play.dto"
-import { joinVoiceChannel } from "@discordjs/voice"
+import {
+	createAudioPlayer,
+	createAudioResource,
+	joinVoiceChannel,
+	NoSubscriberBehavior
+} from "@discordjs/voice"
 import { YoutubeService } from "@/youtube/youtube.service"
 import { Music } from "ytubes/dist/types/data"
 import { Database } from "@/types"
@@ -109,22 +114,23 @@ export class PlayCommand {
 				`You must be in a voice channel in order to play music.`
 			)
 
-		let isBotConnected = false
-		const voiceMembers = message.guild.channels.cache.get(
-			voice.channelId
-		).members
-
-		if (voiceMembers instanceof Map) {
-			voiceMembers.map(member => {
-				if (!member.user.bot) return
-				isBotConnected = member.user.id === process.env.DISCORD_APP_ID
-			})
-		}
-
-		if (!isBotConnected) this.joinVoiceChannel(message)
+		const connection = this.joinVoiceChannel(message)
 		const music = await this.youtubeService.findMusic(dto.song)
 		const selectedMusic = music[0]
 		if (!music.length) return message.reply("Song not found!")
+
+		const player = createAudioPlayer({
+			behaviors: {
+				noSubscriber: NoSubscriberBehavior.Pause
+			}
+		})
+
+		await this.youtubeService.getMp3File(selectedMusic.link)
+		// createAudioResource(, {
+		// 	metadata: {
+		// 		title: 'A good song!',
+		// 	},
+		// });
 
 		const embed = this.getPlayCommandEmbed(message, selectedMusic)
 
