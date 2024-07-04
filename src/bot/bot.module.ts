@@ -7,6 +7,7 @@ import { YoutubeService } from "@/youtube/youtube.service"
 import { AddToPlaylistSubCommand } from "./commands/sub/playlist/add-to-playlist.subcommand"
 import { ShowPlaylistSubCommand } from "./commands/sub/playlist/show-playlist.subcommand"
 import { drizzleProvider } from "@/db/drizzle.provider"
+import { SubscriptionsCommand } from "./commands/subscriptions.command"
 
 @Module({
 	imports: [DiscordModule.forFeature()],
@@ -15,6 +16,7 @@ import { drizzleProvider } from "@/db/drizzle.provider"
 		YoutubeService,
 		PlayCommand,
 		PlaylistCommand,
+		SubscriptionsCommand,
 		ShowPlaylistSubCommand,
 		AddToPlaylistSubCommand
 	]
